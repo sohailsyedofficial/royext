@@ -1,0 +1,141 @@
+import type FileSystem from "./filesystem";
+import type { FileCreateOptions, FileInfo, FileReader, FileWriter } from "./filesystem";
+
+const RETRYABLE_429_OPS = new Set(["verify", "open", "read", "openDir", "list", "getDirUrl"]);
+
+/**
+ * 速率限制器
+ * 控制并发操作数量，防止过多并发请求
+ */
+export class RateLimiter {
+  private queue: Array<() => void> = [];
+
+  private running = 0;
+
+  private maxConcurrent: number;
+
+  constructor(maxConcurrent = 5) {
+    this.maxConcurrent = maxConcurrent;
+  }
+
+  /**
+   * 执行限速操作
+   * @param fn 要执行的操作函数
+   * @param op 操作类型，用于在遇到 429 时判断是否允许自动重试。默认值 "unknown" 不在白名单内，会被视为不可重试
+   * @returns 操作结果
+   */
+  async execute<T>(fn: () => Promise<T>, op = "unknown"): Promise<T> {
+    // 如果当前运行的操作数已达到上限，则等待
+    while (this.running >= this.maxConcurrent) {
+      await new Promise<void>((resolve) => {
+        this.queue.push(resolve);
+      });
+    }
+
+    this.running++;
+    try {
+      return await this.executeWithRetry(fn, op);
+    } finally {
+      this.running--;
+      // 执行完成后，从队列中取出下一个等待的操作
+      const next = this.queue.shift();
+      if (next) {
+        next();
+      }
+    }
+  }
+
+  /**
+   * 执行操作并处理 429 错误重试
+   * @param fn 要执行的操作函数
+   * @param op 操作类型，用于判定该操作在遇到 429 时是否进入指数退避重试
+   * @returns 操作结果
+   */
+  private async executeWithRetry<T>(fn: () => Promise<T>, op: string): Promise<T> {
+    // 最多重试 10 次
+    for (let i = 0; i <= 10; i++) {
+      try {
+        return await fn();
+      } catch (error) {
+        // 检查错误字符串中是否包含 429
+        const errorStr = String(error).toLowerCase();
+        if (this.shouldRetry429(op, ` ${errorStr} `) && i < 10) {
+          // 遇到 429 错误且未达到重试上限，采用指数退避策略延迟后继续重试
+          const delay = Math.min(2000 * Math.pow(2, i), 60000);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          // 继续下一次循环重试
+          continue;
+        }
+        // 其他错误或达到重试上限，直接抛出
+        throw error;
+      }
+    }
+    // 理论上不会到达这里：循环最后一次的 catch 已经把原始错误抛出
+    throw new Error(`Max retries exceeded (op=${op})`);
+  }
+
+  private shouldRetry429(op: string, errorStr: string): boolean {
+    return (
+      ((errorStr.includes("429") && /[^a-z\d]429[^a-z\d]/.test(errorStr)) || errorStr.includes("too many requests")) &&
+      RETRYABLE_429_OPS.has(op)
+    );
+  }
+}
+
+// 文件系统限速器，防止并发请求过多达到服务器限制
+// 也防止上传/下载带宽占用过多超时导致失败/数据不全的问题
+export default class LimiterFileSystem implements FileSystem {
+  private fs: FileSystem;
+
+  private limiter: RateLimiter;
+
+  constructor(fs: FileSystem, limiter?: RateLimiter) {
+    this.fs = fs;
+    this.limiter = limiter || new RateLimiter();
+  }
+
+  verify(): Promise<void> {
+    return this.limiter.execute(() => this.fs.verify(), "verify");
+  }
+
+  async open(file: FileInfo): Promise<FileReader> {
+    return this.limiter.execute(async () => {
+      const reader = await this.fs.open(file);
+      return {
+        read: (type) => this.limiter.execute(() => reader.read(type), "read"),
+      };
+    }, "open");
+  }
+
+  async openDir(path: string): Promise<FileSystem> {
+    return this.limiter.execute(async () => {
+      const fs = await this.fs.openDir(path);
+      return new LimiterFileSystem(fs, this.limiter);
+    }, "openDir");
+  }
+
+  async create(path: string, opts?: FileCreateOptions): Promise<FileWriter> {
+    return this.limiter.execute(async () => {
+      const writer = await this.fs.create(path, opts);
+      return {
+        write: (content) => this.limiter.execute(() => writer.write(content), "write"),
+      };
+    }, "create");
+  }
+
+  createDir(dir: string, opts?: FileCreateOptions): Promise<void> {
+    return this.limiter.execute(() => this.fs.createDir(dir, opts), "createDir");
+  }
+
+  delete(path: string): Promise<void> {
+    return this.limiter.execute(() => this.fs.delete(path), "delete");
+  }
+
+  list(): Promise<FileInfo[]> {
+    return this.limiter.execute(() => this.fs.list(), "list");
+  }
+
+  getDirUrl(): Promise<string> {
+    return this.limiter.execute(() => this.fs.getDirUrl(), "getDirUrl");
+  }
+}

@@ -1,0 +1,36 @@
+name: Auto_Package
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Package with Node
+        env:
+          CHROME_PEM: ${{ secrets.CHROME_PEM }}
+        run: |
+          mkdir dist
+          echo "$CHROME_PEM" > ./dist/scriptcat.pem
+          chmod 600 ./dist/scriptcat.pem
+          pnpm i --frozen-lockfile
+          pnpm test
+          pnpm run pack
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./dist/*.zip,./dist/*.crx"

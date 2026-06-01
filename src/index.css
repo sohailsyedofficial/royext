@@ -1,0 +1,705 @@
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./assets/fonts/outfit-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('./assets/fonts/outfit-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('./assets/fonts/outfit-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('./assets/fonts/outfit-latin-700-normal.woff2') format('woff2');
+}
+
+@unocss preflights;
+@unocss default;
+@unocss;
+
+* {
+    scrollbar-color: inherit;
+}
+
+body {
+    scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
+    transition: background-color 0.3s ease;
+}
+
+body[arco-theme='dark'] {
+    --color-scrollbar-thumb: #4a3e7e;
+    --color-scrollbar-track: #06040a;
+    background-color: #06040a !important;
+    background-image: 
+      linear-gradient(rgba(6, 4, 10, 0.93), rgba(6, 4, 10, 0.93)),
+      linear-gradient(90deg, rgba(167, 139, 250, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(167, 139, 250, 0.035) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+body[arco-theme='light'] {
+    --color-scrollbar-thumb: #ddd6fe;
+    --color-scrollbar-track: #faf9ff;
+    background-color: #faf9ff !important;
+    background-image: 
+      linear-gradient(rgba(250, 249, 255, 0.96), rgba(250, 249, 255, 0.96)),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.02) 1px, transparent 1px),
+      linear-gradient(rgba(124, 58, 237, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+#root {
+    overscroll-behavior: none;
+    contain: content;
+    overflow: auto;
+    min-height: 100vh;
+}
+
+:root {
+	--sc-zero-1: 0;
+	--sc-zero-2: 0;
+	--sc-zero-3: 0;
+	--sc-zero-4: 0;
+}
+
+/* RoyExt Premium Royal Purple Theme Overrides for Light Mode */
+html body, html body[arco-theme='light'] {
+	--primary-1: 245, 243, 255;
+	--primary-2: 237, 233, 254;
+	--primary-3: 221, 214, 254;
+	--primary-4: 192, 132, 252;
+	--primary-5: 167, 139, 250;
+	--primary-6: 124, 58, 237;
+	--primary-7: 109, 40, 217;
+	--primary-8: 91, 33, 182;
+	--primary-9: 76, 29, 149;
+	--primary-10: 46, 16, 101;
+
+	--arcoblue-1: 245, 243, 255;
+	--arcoblue-2: 237, 233, 254;
+	--arcoblue-3: 221, 214, 254;
+	--arcoblue-4: 192, 132, 252;
+	--arcoblue-5: 167, 139, 250;
+	--arcoblue-6: 124, 58, 237;
+	--arcoblue-7: 109, 40, 217;
+	--arcoblue-8: 91, 33, 182;
+	--arcoblue-9: 76, 29, 149;
+	--arcoblue-10: 46, 16, 101;
+
+	--link-color: #7c3aed;
+	--link-hover-color: #6d28d9;
+
+	/* Soft Purple Tinted Backgrounds and Borders */
+	--color-bg-1: #faf9ff;
+	--color-bg-2: #ffffff;
+	--color-bg-3: #f5f3ff;
+	--color-bg-4: #ede9fe;
+	--color-bg-5: #ddd6fe;
+	--color-bg-white: #ffffff;
+	--color-border-1: #ede9fe;
+	--color-border-2: #e0d9ff;
+	--color-border-3: #ddd6fe;
+
+	font-family: 'Outfit', system-ui, -apple-system, sans-serif !important;
+}
+
+/* RoyExt Premium Royal Purple Theme Overrides for Dark Mode */
+html body[arco-theme='dark'] {
+	--primary-1: 30, 27, 75;
+	--primary-2: 46, 16, 101;
+	--primary-3: 76, 29, 149;
+	--primary-4: 91, 33, 182;
+	--primary-5: 109, 40, 217;
+	--primary-6: 167, 139, 250;
+	--primary-7: 192, 132, 252;
+	--primary-8: 221, 214, 254;
+	--primary-9: 237, 233, 254;
+	--primary-10: 245, 243, 255;
+
+	--arcoblue-1: 30, 27, 75;
+	--arcoblue-2: 46, 16, 101;
+	--arcoblue-3: 76, 29, 149;
+	--arcoblue-4: 91, 33, 182;
+	--arcoblue-5: 109, 40, 217;
+	--arcoblue-6: 167, 139, 250;
+	--arcoblue-7: 192, 132, 252;
+	--arcoblue-8: 221, 214, 254;
+	--arcoblue-9: 237, 233, 254;
+	--arcoblue-10: 245, 243, 255;
+
+	--link-color: #a78bfa;
+	--link-hover-color: #c084fc;
+
+	/* Cohesive Dark Royal Purple Backgrounds and Borders */
+	--color-bg-1: #09070f;
+	--color-bg-2: #120f1c;
+	--color-bg-3: #181427;
+	--color-bg-4: #221d37;
+	--color-bg-5: #2c2547;
+	--color-bg-white: #120f1c;
+	--color-border-1: #1e1933;
+	--color-border-2: #272144;
+	--color-border-3: #322b56;
+	--color-border-4: #4a3e7e;
+
+	/* Cohesive Light Purple Tinted Text Colors */
+	--color-text-1: #f5f3ff;
+	--color-text-2: #d8b4fe;
+	--color-text-3: #a78bfa;
+	--color-text-4: #6d28d9;
+}
+
+/* 自定义 .sc-inset-0 避免打包成 inset: 0 使旧浏览器布局错位 */
+.sc-inset-0 {
+	top: var(--sc-zero-1);
+	left: var(--sc-zero-2);
+	right: var(--sc-zero-3);
+	bottom: var(--sc-zero-4);
+}
+
+/* ==========================================================================
+   RoyExt Futuristic / Premium Glassmorphic Theme Style Adjustments
+   ========================================================================== */
+
+/* Keyframe animations for background glow objects */
+@keyframes float {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(40px, -50px) scale(1.1); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float-reverse {
+  0% { transform: translate(0px, 0px) scale(1.15); }
+  50% { transform: translate(-30px, 40px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1.15); }
+}
+
+/* Background floating glow blobs */
+.futuristic-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 0.5s ease;
+}
+
+body[arco-theme='dark'] .orb-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.45) 0%, rgba(139, 92, 246, 0) 70%);
+  top: -120px;
+  right: -100px;
+  animation: float 25s infinite ease-in-out;
+}
+
+body[arco-theme='dark'] .orb-2 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.35) 0%, rgba(219, 39, 119, 0) 70%);
+  bottom: -150px;
+  left: -120px;
+  animation: float-reverse 30s infinite ease-in-out;
+}
+
+body[arco-theme='dark'] .orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(79, 70, 229, 0) 70%);
+  top: 35%;
+  left: 20%;
+  animation: float 22s infinite ease-in-out alternate;
+}
+
+/* Light mode background glow blobs */
+body[arco-theme='light'] .orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, rgba(139, 92, 246, 0) 70%);
+  top: -100px;
+  right: -100px;
+  animation: float 25s infinite ease-in-out;
+}
+
+body[arco-theme='light'] .orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(219, 39, 119, 0) 70%);
+  bottom: -150px;
+  left: -150px;
+  animation: float-reverse 30s infinite ease-in-out;
+}
+
+body[arco-theme='light'] .orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(79, 70, 229, 0) 70%);
+  top: 40%;
+  left: 25%;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+/* Sleek header typography logo */
+.royext-logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #d8b4fe 45%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(167, 139, 250, 0.4));
+}
+
+body[arco-theme='light'] .royext-logo-text {
+  background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  filter: none;
+}
+
+/* Glassmorphic Header overrides */
+.arco-layout-header {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(9, 7, 15, 0.55) !important;
+  border-bottom: none !important;
+  position: relative;
+  z-index: 10;
+  transition: background 0.3s;
+}
+
+.arco-layout-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0) 0%, rgba(139, 92, 246, 0.5) 25%, rgba(236, 72, 153, 0.5) 75%, rgba(139, 92, 246, 0) 100%);
+  box-shadow: 0 1px 8px rgba(139, 92, 246, 0.4);
+}
+
+body[arco-theme='light'] .arco-layout-header {
+  background: rgba(250, 249, 255, 0.75) !important;
+}
+
+body[arco-theme='light'] .arco-layout-header::after {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0) 0%, rgba(124, 58, 237, 0.2) 25%, rgba(219, 39, 119, 0.2) 75%, rgba(124, 58, 237, 0) 100%);
+  box-shadow: none;
+}
+
+/* Glassmorphic Sider overrides */
+.arco-layout-sider {
+  background: rgba(18, 15, 28, 0.45) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 9;
+}
+
+body[arco-theme='light'] .arco-layout-sider {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-right: 1px solid rgba(124, 58, 237, 0.06) !important;
+}
+
+.arco-layout-content {
+  background: transparent !important;
+  border-left: none !important;
+}
+
+/* Main Content Floating Glass Card Panel with Pulsing Glow Border */
+.tw-absolute.sc-inset-0.tw-m-\[10px\] {
+  margin: 14px !important;
+  background: rgba(18, 15, 28, 0.4) !important;
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 
+              0 0 20px rgba(139, 92, 246, 0.04),
+              inset 0 1px 1px rgba(255, 255, 255, 0.04) !important;
+  overflow: auto;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tw-absolute.sc-inset-0.tw-m-\[10px\]:hover {
+  border-color: rgba(167, 139, 250, 0.15) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), 
+              0 0 30px rgba(139, 92, 246, 0.08),
+              inset 0 1px 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+body[arco-theme='light'] .tw-absolute.sc-inset-0.tw-m-\[10px\] {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(124, 58, 237, 0.06) !important;
+  box-shadow: 0 8px 32px 0 rgba(124, 58, 237, 0.05) !important;
+}
+
+body[arco-theme='light'] .tw-absolute.sc-inset-0.tw-m-\[10px\]:hover {
+  border-color: rgba(124, 58, 237, 0.15) !important;
+  box-shadow: 0 12px 40px 0 rgba(124, 58, 237, 0.08) !important;
+}
+
+/* Futuristic Active and Hover sidebar menu styling */
+.arco-menu {
+  background: transparent !important;
+  border: none !important;
+}
+
+.arco-menu-item {
+  background: transparent !important;
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+  width: calc(100% - 16px) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+  color: var(--color-text-2) !important;
+}
+
+.arco-menu-item:hover {
+  background: rgba(167, 139, 250, 0.08) !important;
+  color: #ffffff !important;
+  transform: translateX(4px);
+}
+
+body[arco-theme='light'] .arco-menu-item {
+  color: #4b5563 !important;
+}
+
+body[arco-theme='light'] .arco-menu-item:hover {
+  background: rgba(124, 58, 237, 0.06) !important;
+  color: #4c1d95 !important;
+}
+
+.arco-menu-selected {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.15) 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 0 12px rgba(139, 92, 246, 0.15), 0 4px 12px rgba(139, 92, 246, 0.1) !important;
+  border-left: 3px solid #a78bfa !important;
+}
+
+body[arco-theme='light'] .arco-menu-selected {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(99, 102, 241, 0.08) 100%) !important;
+  color: #4c1d95 !important;
+  border-left: 3px solid #7c3aed !important;
+}
+
+/* Submenu border */
+.arco-menu[style*="borderTop"] {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+body[arco-theme='light'] .arco-menu[style*="borderTop"] {
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Action Tools button enhancements (Theme, Language, Help) */
+.action-tools .arco-btn-text {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 6px !important;
+  transition: all 0.2s ease !important;
+  color: var(--color-text-2) !important;
+}
+
+.action-tools .arco-btn-text:hover {
+  background: rgba(167, 139, 250, 0.15) !important;
+  color: #ffffff !important;
+  border-color: rgba(167, 139, 250, 0.3) !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.25) !important;
+}
+
+body[arco-theme='light'] .action-tools .arco-btn-text {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #4b5563 !important;
+}
+
+body[arco-theme='light'] .action-tools .arco-btn-text:hover {
+  background: rgba(124, 58, 237, 0.08) !important;
+  color: #4c1d95 !important;
+  border-color: rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Futuristic neon action button */
+.futuristic-action-btn {
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45) !important;
+  transition: all 0.3s ease !important;
+  color: #ffffff !important;
+}
+
+.futuristic-action-btn:hover {
+  background: linear-gradient(135deg, #c084fc 0%, #8b5cf6 100%) !important;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+/* Table Style Overrides to match Glassmorphism */
+.arco-table {
+  background: transparent !important;
+}
+.arco-table-container {
+  border: none !important;
+}
+.arco-table-th {
+  background: rgba(167, 139, 250, 0.07) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  font-weight: 600 !important;
+  color: var(--color-text-1) !important;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.arco-table-td {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-text-2) !important;
+  transition: background-color 0.2s ease !important;
+}
+.arco-table-tr:hover .arco-table-td {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+body[arco-theme='light'] .arco-table-th {
+  background: rgba(124, 58, 237, 0.04) !important;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.08) !important;
+  color: #374151 !important;
+}
+body[arco-theme='light'] .arco-table-td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03) !important;
+  color: #4b5563 !important;
+}
+body[arco-theme='light'] .arco-table-tr:hover .arco-table-td {
+  background: rgba(124, 58, 237, 0.01) !important;
+}
+
+/* Futuristic custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.18);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.45);
+}
+body[arco-theme='light'] ::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.15);
+}
+body[arco-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.35);
+}
+
+/* Glowing Neon Badges & Tags */
+.arco-tag {
+  background: rgba(167, 139, 250, 0.1) !important;
+  border: 1px solid rgba(167, 139, 250, 0.22) !important;
+  color: #d8b4fe !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease;
+}
+.arco-tag:hover {
+  background: rgba(167, 139, 250, 0.18) !important;
+  border-color: rgba(167, 139, 250, 0.35) !important;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.25);
+}
+.arco-tag-color-green {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.22) !important;
+  color: #34d399 !important;
+}
+.arco-tag-color-green:hover {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.25);
+}
+.arco-tag-color-red {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.22) !important;
+  color: #fca5a5 !important;
+}
+.arco-tag-color-red:hover {
+  background: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.25);
+}
+.arco-tag-color-orange {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border: 1px solid rgba(245, 158, 11, 0.22) !important;
+  color: #fcd34d !important;
+}
+.arco-tag-color-orange:hover {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+body[arco-theme='light'] .arco-tag {
+  background: rgba(124, 58, 237, 0.05) !important;
+  border: 1px solid rgba(124, 58, 237, 0.15) !important;
+  color: #6d28d9 !important;
+}
+body[arco-theme='light'] .arco-tag-color-green {
+  background: rgba(16, 185, 129, 0.05) !important;
+  border: 1px solid rgba(16, 185, 129, 0.15) !important;
+  color: #059669 !important;
+}
+body[arco-theme='light'] .arco-tag-color-red {
+  background: rgba(239, 68, 68, 0.05) !important;
+  border: 1px solid rgba(239, 68, 68, 0.15) !important;
+  color: #dc2626 !important;
+}
+body[arco-theme='light'] .arco-tag-color-orange {
+  background: rgba(245, 158, 11, 0.05) !important;
+  border: 1px solid rgba(245, 158, 11, 0.15) !important;
+  color: #d97706 !important;
+}
+
+/* Custom secondary / text button enhancements */
+.arco-btn-secondary {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  color: var(--color-text-2) !important;
+  transition: all 0.2s ease !important;
+}
+.arco-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(167, 139, 250, 0.25) !important;
+  color: #ffffff !important;
+}
+body[arco-theme='light'] .arco-btn-secondary {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #4b5563 !important;
+}
+body[arco-theme='light'] .arco-btn-secondary:hover {
+  background: rgba(124, 58, 237, 0.05) !important;
+  border-color: rgba(124, 58, 237, 0.25) !important;
+  color: #4c1d95 !important;
+}
+
+/* Glassmorphic Modals */
+.arco-modal {
+  background: rgba(18, 15, 28, 0.85) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+.arco-modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: transparent !important;
+}
+.arco-modal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  background: transparent !important;
+}
+.arco-modal-title {
+  color: var(--color-text-1) !important;
+  font-weight: 600 !important;
+}
+body[arco-theme='light'] .arco-modal {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(124, 58, 237, 0.1) !important;
+  box-shadow: 0 20px 50px rgba(124, 58, 237, 0.08) !important;
+}
+body[arco-theme='light'] .arco-modal-header,
+body[arco-theme='light'] .arco-modal-footer {
+  border-color: rgba(124, 58, 237, 0.06) !important;
+}
+
+/* Horizontal top navigation menu */
+.header-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.nav-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  color: var(--color-text-2) !important;
+  text-decoration: none !important;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-tab-item svg {
+  font-size: 13px;
+  margin-right: 2px;
+}
+
+.nav-tab-item:hover {
+  background: rgba(167, 139, 250, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.nav-tab-item.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  border: 1px solid rgba(167, 139, 250, 0.25) !important;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.15) !important;
+}
+
+body[arco-theme='light'] .nav-tab-item {
+  color: #4b5563 !important;
+}
+
+body[arco-theme='light'] .nav-tab-item:hover {
+  background: rgba(124, 58, 237, 0.05) !important;
+  color: #4c1d95 !important;
+}
+
+body[arco-theme='light'] .nav-tab-item.active {
+  background: rgba(124, 58, 237, 0.08) !important;
+  color: #4c1d95 !important;
+  border: 1px solid rgba(124, 58, 237, 0.2) !important;
+  box-shadow: none !important;
+}
+
+
+

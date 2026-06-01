@@ -1,0 +1,95 @@
+import ServiceWorkerManager from "./app/service/service_worker";
+import LoggerCore from "./app/logger/core";
+import DBWriter from "./app/logger/db_writer";
+import { LoggerDAO } from "./app/repo/logger";
+import { ExtensionMessage } from "@Packages/message/extension_message";
+import { Server } from "@Packages/message/server";
+import { MessageQueue } from "@Packages/message/message_queue";
+import { ServiceWorkerMessageSend } from "@Packages/message/window_message";
+import { EventPageOffscreenManager } from "./app/service/offscreen/event_page_manager";
+import migrate, { migrateChromeStorage } from "./app/migrate";
+import { cleanInvalidKeys } from "./app/repo/resource";
+
+migrate();
+migrateChromeStorage();
+
+const OFFSCREEN_DOCUMENT_PATH = "src/offscreen.html";
+
+let creating: Promise<void> | null | boolean = null;
+
+async function hasDocument() {
+  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT],
+    documentUrls: [offscreenUrl],
+  });
+  return existingContexts.length > 0;
+}
+
+async function setupOffscreenDocument() {
+  if (typeof chrome.offscreen?.createDocument !== "function") {
+    // Firefox does not support offscreen
+    console.error("Your browser does not support chrome.offscreen.createDocument");
+    return;
+  }
+  //if we do not have a document, we are already setup and can skip
+  if (!(await hasDocument())) {
+    // create offscreen document
+    if (!creating) {
+      const promise = chrome.offscreen
+        .createDocument({
+          url: OFFSCREEN_DOCUMENT_PATH,
+          reasons: [
+            chrome.offscreen.Reason.BLOBS,
+            chrome.offscreen.Reason.CLIPBOARD,
+            chrome.offscreen.Reason.DOM_SCRAPING,
+            chrome.offscreen.Reason.LOCAL_STORAGE,
+          ],
+          justification: "offscreen page",
+        })
+        .then(() => {
+          if (creating !== promise) {
+            console.log("setupOffscreenDocument() calling is invalid.");
+            return;
+          }
+          creating = true; // chrome.offscreen.createDocument 只执行一次
+        });
+      creating = promise;
+    }
+    await creating;
+  }
+}
+
+function main() {
+  cleanInvalidKeys();
+  // 初始化管理器
+  const message = new ExtensionMessage(true);
+  // 初始化日志组件
+  const loggerCore = new LoggerCore({
+    writer: new DBWriter(new LoggerDAO()),
+    labels: { env: "service_worker" },
+  });
+  loggerCore.logger().debug("service worker start");
+  const server = new Server("serviceWorker", message);
+  const messageQueue = new MessageQueue();
+  const hasOffscreenDocument = typeof chrome.offscreen?.createDocument === "function";
+  // Chrome needs a real offscreen document. Firefox MV3 uses EventPageOffscreenManager instead.
+  if (hasOffscreenDocument) {
+    const offscreen = new ServiceWorkerMessageSend();
+    const manager = new ServiceWorkerManager(server, messageQueue, offscreen);
+    manager.initManager();
+    setupOffscreenDocument();
+  } else {
+    const offscreen = new EventPageOffscreenManager(message);
+    const manager = new ServiceWorkerManager(server, messageQueue, offscreen);
+    manager.initManager();
+    // ServiceWorkerManager installs its preparationOffscreen subscribers after .initManager().
+    // In Firefox MV3 there is no real offscreen document, so the background event page
+    // itself is already the DOM-capable offscreen environment.
+    setTimeout(() => {
+      messageQueue.emit("preparationOffscreen", {});
+    }, 0);
+  }
+}
+
+main();
